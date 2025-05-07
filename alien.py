@@ -9,9 +9,9 @@ class Alien(Sprite):
         self.settings = ai_game.settings
 
         # alien image and rect
-        self.image = pygame.image.load("images/ship_012.png")
+        self.image = pygame.image.load("images/enemy.png")
         self.image = pygame.transform.scale(self.image, (60, 60))
-        self.image = pygame.transform.rotate(self.image, 180)
+        # self.image = pygame.transform.rotate(self.image, 180)
         self.rect = self.image.get_frect()
 
         # placement for alien

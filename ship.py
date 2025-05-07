@@ -9,7 +9,7 @@ class Ship:
         self.screen_rect = ai_game.screen.get_rect()
 
         # Load the ship image and get its rect
-        self.image = pygame.image.load("images/ship_008.png")
+        self.image = pygame.image.load("images/ship.png")
         self.image = pygame.transform.scale(self.image, (65, 65))
         self.rect = self.image.get_frect()  # gets the float values of rect instead of int
 

@@ -14,7 +14,7 @@ class Bullet(Sprite):
         # Create a bullet rect at (0, 0) and then set corrent position.
         self.rect = pygame.FRect(0, 0, self.settings.bullet_width + 4, self.settings.bullet_height + 4)
         self.bg_rect = pygame.FRect(0, 0, self.settings.bullet_width, self.settings.bullet_height)
-        self.rect.midtop = ai_game.ship.rect.midtop
+        self.rect.midbottom = ai_game.ship.rect.midtop
         self.rect.x += 1
         self.bg_rect.center = self.rect.center
 
