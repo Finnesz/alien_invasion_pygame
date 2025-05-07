@@ -7,7 +7,7 @@ from game_stats import GameStats
 from ship import Ship
 from bullet import Bullet
 from alien import Alien
-from button import Button, TButton
+from button import TButton, Button
 
 class AlienInvasion:
     """Overall class to manage game assets and behavior."""
