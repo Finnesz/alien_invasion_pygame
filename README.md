@@ -11,17 +11,17 @@ A classic space shooter game built with Python and Pygame-CE, based on the Pytho
 
 ## Installation
 
-# 1. Clone repo
+### 1. Clone repo
 ```bash
 git clone https://github.com/Finnesz/alien_invasion_pygame.git
 ```
 
-# 2. Install dependecies
+### 2. Install dependecies
 ```bash 
 pip install pygame-ce
 ```
 
-# 3. Run
+### 3. Run
 ```bash
 python alien_invasion.py
 ```
