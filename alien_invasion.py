@@ -1,8 +1,9 @@
 import sys
 import pygame
-import pygame_shaders
+import pygame.mixer
 from time import sleep
 from pathlib import Path
+from random import randrange
 
 from settings import Settings
 from game_stats import GameStats
@@ -52,6 +53,33 @@ class AlienInvasion:
         self.medium_button = TButton(self, "MEDIUM", "textures/button_1.png", self.screen_rect.centerx - 100, self.screen_rect.centery + 125)
         self.hard_button = TButton(self, "HARD", "textures/button_1.png", self.screen_rect.centerx - 100, self.screen_rect.centery + 185)
 
+        # Sounds
+        self.bg_music = pygame.Sound("sounds/ObservingTheStar.ogg")
+        self.bg_music.set_volume(0.5)
+        self.bg_music.play(-1)
+
+        self.shooting_sounds = [
+            pygame.Sound("sounds/shooting-sounds/alienshoot1.ogg"), # The player is an alien too!?
+            pygame.Sound("sounds/shooting-sounds/alienshoot3.ogg")]
+
+        # Could write a for loop but there's only two of 'em
+        self.shooting_sounds[0].set_volume(0.1)
+        self.shooting_sounds[1].set_volume(0.1)
+
+        self.explosions = [
+            pygame.Sound("sounds/explosions/explosion01.wav"),
+            pygame.Sound("sounds/explosions/explosion02.wav"),
+            pygame.Sound("sounds/explosions/explosion03.wav"),
+            pygame.Sound("sounds/explosions/explosion04.wav"),
+            pygame.Sound("sounds/explosions/explosion05.wav"),
+            pygame.Sound("sounds/explosions/explosion06.wav"),
+            pygame.Sound("sounds/explosions/explosion07.wav"),
+            pygame.Sound("sounds/explosions/explosion08.wav"),
+            pygame.Sound("sounds/explosions/explosion09.wav"),]
+        
+        for explosion in self.explosions:
+            explosion.set_volume(0.1)
+
     def run_game(self):
         """Start the main game loop for the game."""
         while True:
@@ -70,6 +98,7 @@ class AlienInvasion:
         """Respond to keypresses and mouse events."""
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
+                self.sb.check_high_score()
                 sys.exit()
 
             if event.type == pygame.MOUSEBUTTONDOWN:
@@ -94,8 +123,8 @@ class AlienInvasion:
         elif event.key == pygame.K_SPACE:
             self._fire_bullet()
 
-        elif event.key == pygame.K_q:
-            sys.exit()
+        # elif event.key == pygame.K_q:
+        #     sys.exit()
 
     def _check_keyup_events(self, event):
         """Respond to key releases."""
@@ -154,6 +183,7 @@ class AlienInvasion:
         if len(self.bullets) < self.settings.bullet_limit:
             new_bullet = Bullet(self)
             self.bullets.add(new_bullet)
+            self.shooting_sounds[0].play()
 
     def _update_bullet(self):
         self.bullets.update()
@@ -168,10 +198,10 @@ class AlienInvasion:
         collisions = pygame.sprite.groupcollide(self.bullets, self.aliens, True, True)
 
         if collisions:
+            self.explosions[randrange(0, 9)].play()
             for aliens in collisions.values():
                 self.stats.score += self.settings.alien_points * len(aliens)
             self.sb.prep_score()
-            self.sb.check_high_score()
 
         if not self.aliens:
             self.bullets.empty() # Destroy existing bullets
@@ -215,6 +245,7 @@ class AlienInvasion:
         """Check if one of the aliens hit the bottom of the screen."""
         for alien in self.aliens:
             if alien.rect.bottom >= self.settings.screen_height:
+                self.explosions[randrange(0, 9)].play()
                 self._ship_hit()
                 break
 
@@ -227,6 +258,8 @@ class AlienInvasion:
         """When the ship is hit make the player try again."""
         # Lose one life
         if 0 != self.stats.ships_left - 1:
+            self.explosions[randrange(0, 9)].play()
+
             self.stats.ships_left -= 1
 
             # Remove the bullets and aliens
@@ -237,7 +270,7 @@ class AlienInvasion:
             self._create_fleet()
             self.ship.center_ship()
             self.sb.prep_ships()
-
+            
             # Pause
             sleep(0.5)
         else:
@@ -266,7 +299,8 @@ class AlienInvasion:
 
         self.screen.blit(self.settings.font.render(f"{self.clock.get_fps():.0f}", False, self.settings.palette[3]), (10, 10))
 
-        self.screen.blit(self.settings.font.render(f"Difficulty: {self.settings.set_difficulty}", False, self.settings.palette[3]), (self.settings.screen_width/2 - 75, 10))
+        text = self.settings.difficulty_text[self.settings.set_difficulty]
+        self.screen.blit(text, self.settings.difficulty_text_pos[self.settings.set_difficulty])
 
         # Draw score
         self.sb.show_score()
@@ -288,8 +322,6 @@ class AlienInvasion:
             self.medium_button.draw_button()
             self.hard_button.draw_button()
 
-
-        #self.crt_shader.render_direct(pygame.Rect(0, 0, self.settings.screen_width, self.settings.screen_height))
 
         # Make the most recently drawn screen visible
         pygame.display.flip()
