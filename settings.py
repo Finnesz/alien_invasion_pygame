@@ -14,7 +14,6 @@ class Settings:
         self.palette = []
 
         for color in self.colors:
-            # print(color)
             self.palette.append(pygame.Color(color))
 
         # Screen settings
@@ -32,11 +31,14 @@ class Settings:
         self.bullet_bg = self.palette[2]
         self.bullet_limit = 3
 
+        self.alien_fire_rate = 2
+
         # Font settings
         self.font = pygame.font.SysFont("Noto Sans", 16)
         self.difficulty_text = {}
         self.difficulty_text_pos = {}
 
+        # Pre-render text difficulty
         for difficulty, label in [
             (Difficulty.EASY, "EASY"),
             (Difficulty.MEDIUM, "MEDIUM"),
@@ -64,14 +66,17 @@ class Settings:
                 self.ship_speed = 1.5
                 self.bullet_speed = 2.5
                 self.alien_speed = 1.0
+                self.alien_fire_rate = 2
             case Difficulty.MEDIUM:
                 self.ship_speed = 2.1
                 self.bullet_speed = 3.1
                 self.alien_speed = 2.6
+                self.alien_fire_rate = 2.5
             case Difficulty.HARD:
                 self.ship_speed = 2.4
                 self.bullet_speed = 3.4
                 self.alien_speed = 3.9
+                self.alien_fire_rate = 3
 
         self.alien_points = 50
         self.fleet_direction = 1 # fleet direction of 1 represents right; -1 represents left.
