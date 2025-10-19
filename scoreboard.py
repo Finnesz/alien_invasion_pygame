@@ -38,11 +38,11 @@ class ScoreBoard:
 
     def prep_level(self):
         level_str = str(self.stats.level)
-        self.level_img = self.font.render(level_str, False, self.text_color, self.settings.palette[0])
+        self.level_img = self.font.render(f"Level {level_str}", False, self.text_color, self.settings.palette[0])
         
         self.level_rect = self.level_img.get_frect()
-        self.level_rect.bottom = self.screen_rect.bottom - 12
-        self.level_rect.left = self.screen_rect.left + 195
+        self.level_rect.bottom = self.screen_rect.bottom - 10
+        self.level_rect.left = self.screen_rect.right - 150
 
     def prep_ships(self):
         self.ships = Group()
