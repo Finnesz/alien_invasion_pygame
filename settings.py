@@ -28,13 +28,24 @@ class Settings:
         # Bullet settings
         self.bullet_width = 5
         self.bullet_height = 15
-        self.bullet_color = self.palette[1]
-        self.bullet_bg = self.palette[1]
+        self.bullet_color = self.palette[2]
+        self.bullet_bg = self.palette[2]
         self.bullet_limit = 3
 
         # Font settings
         self.font = pygame.font.SysFont("Noto Sans", 16)
-        # print(pygame.font.get_fonts())
+        self.difficulty_text = {}
+        self.difficulty_text_pos = {}
+
+        for difficulty, label in [
+            (Difficulty.EASY, "EASY"),
+            (Difficulty.MEDIUM, "MEDIUM"),
+            (Difficulty.HARD, "HARD"),
+        ]:
+            text = self.font.render(label, False, self.palette[3])
+            self.difficulty_text[difficulty] = text
+            pos = self.screen_width / 2 - text.get_width() / 2
+            self.difficulty_text_pos[difficulty] = (pos, 10)            
 
         # Alien settings
         self.drop_down_speed = 10
