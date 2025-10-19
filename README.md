@@ -2,9 +2,19 @@
 
 ![](/gameplay.gif)
 
-A classic space shooter game built with Python and Pygame-CE, based on the Python Crash Course project with additional enhancements.
+A space shooter game built with Python and Pygame-CE as a learning project based on Python Crash Course.
 
-## Sound Assets
+## License
+
+This project code is licensed under the MIT License - see the LICENSE file for details.
+
+**Note:** Audio assets have their own licenses (see Credits below).
+
+## Credits & Audio Assets
+
+### Game Code
+- Based on "Python Crash Course" by Eric Matthes
+- Original repo: https://github.com/ehmatthes/pcc_3e
 
 ### Background music
 - "ObservingTheStar" by yd from [opengameart](https://opengameart.org/content/another-space-background-track)
