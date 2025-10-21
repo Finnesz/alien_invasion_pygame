@@ -71,12 +71,12 @@ class Settings:
                 self.ship_speed = 2.1
                 self.bullet_speed = 3.1
                 self.alien_speed = 2.6
-                self.alien_fire_rate = 2.5
+                self.alien_fire_rate = 3
             case Difficulty.HARD:
                 self.ship_speed = 2.4
                 self.bullet_speed = 3.4
                 self.alien_speed = 3.9
-                self.alien_fire_rate = 3
+                self.alien_fire_rate = 4
 
         self.alien_points = 50
         self.fleet_direction = 1 # fleet direction of 1 represents right; -1 represents left.
