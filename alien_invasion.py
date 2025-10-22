@@ -7,9 +7,12 @@ from random import randrange, choice, randint
 
 from settings import Settings
 from game_stats import GameStats
+
 from ship import Ship
 from bullet import Bullet, AlienBullet
 from alien import Alien
+from shield import ShieldBlock
+
 from button import TButton, Button
 from enums import Difficulty
 from scoreboard import ScoreBoard
@@ -25,8 +28,6 @@ class AlienInvasion:
         self.settings = Settings()
         self.settings.set_difficulty = Difficulty.EASY
 
-        #self.screen = pygame.display.set_mode((self.settings.screen_width, self.settings.screen_height), pygame.DOUBLEBUF | pygame.OPENGL)
-        #self.crt_shader = pygame_shaders.Shader(pygame_shaders.DEFAULT_VERTEX_SHADER, "crt.glsl", self.screen)
         self.screen = pygame.display.set_mode((self.settings.screen_width, self.settings.screen_height))
         self.screen_rect = self.screen.get_frect()
 
@@ -37,9 +38,19 @@ class AlienInvasion:
 
         self.ship = Ship(self)
         self.bullets = pygame.sprite.Group()
+        
         self.aliens = pygame.sprite.Group()
         self.alien_bullets = pygame.sprite.Group()
 
+        self.shield = ["#############",
+                       "#############",
+                       "#############",
+                       "#####   #####",
+                       "####     ####"]
+        self.no_shields = 2
+        self.shields = []
+
+        self.form_shield(self.shield)
         self._create_fleet()
 
         # Start alien invasion in an inactive state.
@@ -91,6 +102,7 @@ class AlienInvasion:
                 self.ship.update()
                 self._update_bullet()
                 self._update_aliens()
+                self.check_shield_collision()
 
             self._update_screen()
             self.clock.tick(60)
@@ -197,6 +209,47 @@ class AlienInvasion:
                 self.bullets.remove(bullet)
 
         self._bullet_alien_collision()
+
+    # FORM SHIELD
+    def form_shield(self, block_formation):
+        start_x_pos = 150
+        start_y_pos = 500
+
+        for n_shield in range(self.no_shields):
+            block_pos_x = 0 + start_x_pos
+            block_pos_y = 0 + start_y_pos
+            for line in block_formation:
+                # print(f"block_pos_x:{block_pos_x} \t block_pos_y:{block_pos_y}")
+                for block in line:
+                    if block == "#":
+                        shield_block = ShieldBlock(self)
+
+                        shield_block.rect.x = block_pos_x
+                        shield_block.rect.y = block_pos_y
+
+                        self.shields.append(shield_block)
+                        block_pos_x += 10
+                    else:
+                        block_pos_x += 10
+                block_pos_y += 10
+                block_pos_x = 0 + start_x_pos
+
+            start_x_pos += 300
+        
+    def check_shield_collision(self):
+        for block in self.shields:
+            for bullet in self.bullets:
+                if block.rect.colliderect(bullet.rect):
+                    self.shields.remove(block)
+                    self.bullets.remove(bullet)
+            for alien_bullet in self.alien_bullets:
+                if block.rect.colliderect(alien_bullet.rect):
+                    self.shields.remove(block)
+                    self.alien_bullets.remove(alien_bullet)
+            for alien in self.aliens:
+                if block.rect.colliderect(alien.rect):
+                    self.shields.remove(block)
+                    self.aliens.remove(alien)
 
     def _update_alien_bullets(self):
         self.alien_bullets.update()
@@ -338,6 +391,10 @@ class AlienInvasion:
         # Draw alien bullets
         for alien_bullet in self.alien_bullets:
             alien_bullet.draw_bullet()
+
+        # Draw shield block
+        for shield in self.shields:
+            shield.draw()
 
         # Draw aliens
         self.aliens.draw(self.screen)
