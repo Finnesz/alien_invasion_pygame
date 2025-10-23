@@ -1,6 +1,6 @@
 ﻿# alien_invasion_pygame
 
-![](/gameplay.gif)
+![](/new-gameplay.gif)
 
 A space shooter game built with Python and Pygame-CE as a learning project based on Python Crash Course.
 
