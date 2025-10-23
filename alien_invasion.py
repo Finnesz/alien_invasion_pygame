@@ -42,12 +42,13 @@ class AlienInvasion:
         self.aliens = pygame.sprite.Group()
         self.alien_bullets = pygame.sprite.Group()
 
-        self.shield = ["#############",
+        self.shield = ["   #######   ",
+                       "#############",
                        "#############",
                        "#############",
                        "#####   #####",
                        "####     ####"]
-        self.no_shields = 2
+        self.no_shields = 4
         self.shields = []
 
         self.form_shield(self.shield)
@@ -185,6 +186,7 @@ class AlienInvasion:
 
         # Create new fleet and center the ship
         self._create_fleet()
+        self.form_shield(self.shield)
         self.ship.center_ship()
 
         pygame.mouse.set_visible(False)
@@ -212,7 +214,7 @@ class AlienInvasion:
 
     # FORM SHIELD
     def form_shield(self, block_formation):
-        start_x_pos = 150
+        start_x_pos = 85
         start_y_pos = 500
 
         for n_shield in range(self.no_shields):
@@ -237,19 +239,36 @@ class AlienInvasion:
             start_x_pos += 300
         
     def check_shield_collision(self):
+        blocks_to_remove = set()
+        bullets_to_remove = set()
+        alien_bullets_to_remove = set()
+        aliens_to_remove = set()
+        
         for block in self.shields:
             for bullet in self.bullets:
                 if block.rect.colliderect(bullet.rect):
-                    self.shields.remove(block)
-                    self.bullets.remove(bullet)
+                    blocks_to_remove.add(block)
+                    bullets_to_remove.add(bullet)
+                    self.explosions[randrange(0, 8)].play()
             for alien_bullet in self.alien_bullets:
                 if block.rect.colliderect(alien_bullet.rect):
-                    self.shields.remove(block)
-                    self.alien_bullets.remove(alien_bullet)
+                    blocks_to_remove.add(block)
+                    alien_bullets_to_remove.add(alien_bullet)
+                    self.explosions[randrange(0, 8)].play()
             for alien in self.aliens:
                 if block.rect.colliderect(alien.rect):
-                    self.shields.remove(block)
-                    self.aliens.remove(alien)
+                    blocks_to_remove.add(block)
+                    aliens_to_remove.add(alien)
+                    self.explosions[randrange(0, 8)].play()
+
+        for block in blocks_to_remove:
+            self.shields.remove(block)
+        for bullet in bullets_to_remove:
+            self.bullets.remove(bullet)
+        for alien_bullet in alien_bullets_to_remove:
+            self.alien_bullets.remove(alien_bullet)
+        for alien in aliens_to_remove:
+            self.aliens.remove(alien)
 
     def _update_alien_bullets(self):
         self.alien_bullets.update()
