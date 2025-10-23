@@ -23,7 +23,7 @@ This project code is licensed under the MIT License - see the LICENSE file for d
 - 9 explosion sound effects by Unnamed (Viktor.Hahn@web.de) from [opengameart](https://opengameart.org/content/9-explosion-sounds#)
     - License: [CC BY-SA 3.0 Unported](https://creativecommons.org/licenses/by-sa/3.0/)
 
-- Chunky Explosion by Joth [opengameart](https://opengameart.org/content/chunky-explosion)
+- Chunky Explosion by Joth from [opengameart](https://opengameart.org/content/chunky-explosion)
 
 ## Requirements
 
